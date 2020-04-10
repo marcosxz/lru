@@ -7,8 +7,7 @@ func TestLRUChan(t *testing.T) {
 	for i := 0; i < 100; i++ {
 		lc.Put(i)
 	}
-	t.Log("the lru chan bottom item:", lc.First())
 	lc.Range(func(i interface{}) {
-		t.Log("the lru chan remainder item:", i)
+		t.Log("the lru chan range:", i)
 	})
 }
