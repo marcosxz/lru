@@ -1,13 +1,13 @@
 package lru
 
-type lRUChan chan interface{}
+type Chan chan interface{}
 
-func NewChan(max int) *lRUChan {
-	c := make(lRUChan, max)
+func NewChan(max int) *Chan {
+	c := make(Chan, max)
 	return &c
 }
 
-func (c *lRUChan) Put(elem interface{}) {
+func (c *Chan) Put(elem interface{}) {
 retry:
 	select {
 	case *c <- elem:
@@ -17,7 +17,7 @@ retry:
 	}
 }
 
-func (c *lRUChan) First() interface{} {
+func (c *Chan) Get() interface{} {
 	select {
 	case i := <-*c:
 		return i
@@ -26,7 +26,7 @@ func (c *lRUChan) First() interface{} {
 	}
 }
 
-func (c *lRUChan) Range(fn func(interface{})) {
+func (c *Chan) Range(fn func(interface{})) {
 	for {
 		select {
 		case elem, ok := <-*c:
@@ -40,6 +40,6 @@ func (c *lRUChan) Range(fn func(interface{})) {
 	}
 }
 
-func (c *lRUChan) Len() int {
+func (c *Chan) Len() int {
 	return len(*c)
 }
